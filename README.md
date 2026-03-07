@@ -4,7 +4,7 @@
 # Backend
 * Pour lancer le backend :
   - ```npm install```
-  - ```npx nodemon server.js```
+  - ```npx nodemon server.js``` ou ```node server.js```
 
 # Frontend
 * Pour lancer le frontend :
