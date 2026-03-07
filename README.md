@@ -12,7 +12,7 @@
 * Username : tomatech04_db_user
 * Password : (à envoyer de facon privé)
 
-* connection string : mongodb+srv://tomatech04_db_user:<password>@cluster0.c3hsyyx.mongodb.net/?appName=Cluster0
+* connection string : mongodb+srv://tomatech04_db_user:[password]@cluster0.c3hsyyx.mongodb.net/?appName=Cluster0
 
 # Section API Maileroo
 * Key : (à envoyer)
