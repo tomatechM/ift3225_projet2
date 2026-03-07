@@ -3,10 +3,12 @@
 
 # Backend
 * Pour lancer le backend :
+  - ```cd backend```
   - ```npm install```
   - ```npx nodemon server.js``` ou ```node server.js```
 
 # Frontend
 * Pour lancer le frontend :
+  - ```cd frontend```
   - ```npm install```
   - ```npm run dev```
