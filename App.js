@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 
 const routesUser = require('./userRoutes');
 
-mongoose.connect('mongodb+srv://tomatech04_db_user:r79dd8JO0eRKyckz@cluster0.c3hsyyx.mongodb.net/?appName=Cluster0')
+/*Changer <password> par le mot de passe */
+mongoose.connect('mongodb+srv://tomatech04_db_user:<password>@cluster0.c3hsyyx.mongodb.net/?appName=Cluster0')
 .then(() => console.log('Connexion à MongoDB réussie !'))
 .catch(() => console.log('Connexion à MongoDB échouée !'));
 
