@@ -1,10 +1,13 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 
+
 const routesUser = require('./userRoutes');
 
-/*Changer <password> par le mot de passe */
-mongoose.connect('mongodb+srv://tomatech04_db_user:<password>@cluster0.c3hsyyx.mongodb.net/?appName=Cluster0')
+/*Il faut avoir le fichier .env */
+mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log('Connexion à MongoDB réussie !'))
 .catch(() => console.log('Connexion à MongoDB échouée !'));
 
