@@ -21,8 +21,8 @@ app.use((req, res, next) => {
 });
 
 
-// API routes
-app.use('/api', routesUser);
+
+app.use(routesUser);
 
 app.use((req, res) => {
     res.json({ message: 'Le serveur fonctionne !!' });

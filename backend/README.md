@@ -1,4 +1,6 @@
 # ift3225_projet2
+# Section .env
+* Créer un fichier .env et copier le contenu dans .env-template en ajoutant la clé du mongoDB
 
 # Section Dependances
 * Après avoir installé nodeJS, voici les dépendences à installer :
