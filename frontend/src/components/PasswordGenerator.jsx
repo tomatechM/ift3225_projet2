@@ -6,10 +6,11 @@ function PasswordGenerator(){
 
     const generatePassword = async() => {
         try{
-            const response = await fetch(`http://localhost:3000/motdepasse/${length}`);
-            const data = response.json();
-
-            setPassword(data.password);
+            const response = await fetch(`http://localhost:3000/motdepasse/${length}`, {
+	    	method: "GET"
+	    });
+		const data = await response.json();
+            	setPassword(data.password);
         } catch(error) {
             console.error(error); 
             alert("Erreur de génération du mot de passe");

@@ -4,6 +4,7 @@ function UsersTable(){
     const [users, setUsers] = useState([]);
 
     useEffect(() => {
+	console.log("Fetching users");
         fetchUsers();
     }, []);
 
@@ -12,6 +13,7 @@ function UsersTable(){
             const response = await fetch(`http://localhost:3000/profils`);
             const data = await response.json();
             setUsers(data);
+	    console.log(data);
         } catch(error){
             console.error("Erreur récupération utilisateurs :", error);
         }

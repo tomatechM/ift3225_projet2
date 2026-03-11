@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 
 
 const routesUser = require('./userRoutes');
+const routesProfils = require('./profileRoutes');
+const routesPassword = require('./passwordRoute');
 
 /*Il faut avoir le fichier .env */
 mongoose.connect(process.env.MONGO_URI)
@@ -20,9 +22,11 @@ app.use((req, res, next) => {
     next();
 });
 
-
+app.use(express.json());
 
 app.use(routesUser);
+app.use(routesProfils);
+app.use(routesPassword);
 
 app.use((req, res) => {
     res.json({ message: 'Le serveur fonctionne !!' });

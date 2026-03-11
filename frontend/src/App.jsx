@@ -13,10 +13,10 @@ function App() {
       <h1>Gestion de profils</h1>
       <PasswordGenerator />
       <CreateUser />
-      <UsersTable />
+      {/*<UsersTable />
       <GetUserById />
       <UpdateUser />
-      <DeleteUser />
+      <DeleteUser />*/}
     </>
   )
 }

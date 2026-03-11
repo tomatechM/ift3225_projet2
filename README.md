@@ -12,3 +12,7 @@
   - ```cd frontend```
   - ```npm install```
   - ```npm run dev```
+
+#Backend & Frontend
+* Pour lancer backend/frontend en meme temps :
+  - ```npm run dev```
