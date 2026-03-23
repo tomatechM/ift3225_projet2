@@ -6,6 +6,7 @@ const auth = require('./auth');
 
 router.get('/profils/:id', profCtrl.getProfile);
 //router.get('/profils', async (req, res) => {console.log("GET /profils reached");});
-router.get('/profils', profCtrl.getAllProfiles);
+router.get('/profils', auth, profCtrl.getAllProfiles);
+router.delete('/profils/:id', auth, profCtrl.deleteProfile);
 
 module.exports = router;

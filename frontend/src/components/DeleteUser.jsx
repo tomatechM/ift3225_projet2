@@ -1,18 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function DeleteUser() {
-    const [userId, setUserId] = useState("");
+function DeleteUser({ user_id, onDelete }) {
+    const [userId, setUserId] = useState(user_id);
+
+    useEffect(() => {setUserId(user_id);}, [user_id]);
 
     const handleDelete = async (e) => {
         e.preventDefault();
 
         try{
-            const response = await fetch( `http://localhost:3000/profils/${userId}`, {method: "DELETE"});
+            const response = await fetch(
+		    `http://localhost:3000/profils/${userId}`,
+		    {method: "DELETE"},
+		    {headers: {
+			    Authorization: `Bearer ${localStorage.getItem("token")}`
+		    }}
+	    );
             const data = await response.json();
             console.log(data);
-
+	
+	    if (!response.ok) {throw data;}
             alert("Utilisateur supprimé !");
             setUserId("");
+	    onDelete();
 
         } catch (error){
             console.error(error); 
