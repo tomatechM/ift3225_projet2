@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm start",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "name": "ift3225_projet2",
+  "version": "1.0.0",
+  "description": "# Backend * Pour lancer le backend :   - ```cd backend```   - ```npm install```   - ```npx nodemon server.js``` ou ```node server.js```",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
