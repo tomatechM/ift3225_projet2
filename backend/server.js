@@ -1,8 +1,13 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const http = require('http');
 const app = require('./App');
 
-app.set('port', 3000);
+const PORT = process.env.PORT;
+app.set('port', PORT);
 
 const server = http.createServer(app);
 
-server.listen(3000);
+server.listen(PORT);
+
+console.log('ENV TEST:', process.env.JWT_SECRET);

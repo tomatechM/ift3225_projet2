@@ -8,10 +8,11 @@ exports.signup = (req, res, next) => {
         const user = new User({
             pseudo: req.body.pseudo,
             email: req.body.email,
-            password: hash
+            password: hash,
+	    isAdmin: req.body.isAdmin
         });
         user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !'}))
+        .then(() => res.status(201).json({ message: 'Utilisateur ' + user.pseudo + ' créé !'}))
         .catch(error => res.status(400).json({ error }));
     })
     .catch(error => res.status(500).json({ error }));
@@ -30,6 +31,7 @@ exports.login = (req, res, next) => {
                     }
                     res.status(200).json({
                         userId: user._id,
+			admin: user.isAdmin,
                         token: jwt.sign(
                             {userId: user._id},
                             'PHRASE_ALEATOIRE_TRES_LONGUE',

@@ -1,26 +1,30 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, BrowserRouter, Routes, Route } from "react-router-dom";
+import CreateUser from "./CreateUser";
 
-import PasswordGenerator from "./PasswordGenerator";
-
-function CreateUser(){
+function Login(){
 
     const [pseudo, setPseudo] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isAdmin, setIsAdmin] = useState(false);
-
+  
     const navigate = useNavigate();
 
-    const handleSubmit = async(e) => {
+    localStorage.clear();
+
+    const goToSignup = () => {
+	navigate('/signup');
+    }
+
+    const handleLogin = async(e) => {
         e.preventDefault();
 
         const user = {
-            pseudo, email, password, isAdmin
+            pseudo, email, password
         }
 
         try{
-            const response = await fetch(`http://localhost:3000/enregistrement`, {
+            const response = await fetch(`http://localhost:3000/connexion`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -30,12 +34,12 @@ function CreateUser(){
 
             const data = await response.json();
             console.log(data);
-		
-	    if (!response.ok) {throw data;}
 
-	    localStorage.setItem('token', data.token);
-	    localStorage.setItem('id', data.userId);
-	    localStorage.setItem('admin', data.admin);
+            if (!response.ok) {throw data;}
+
+	    localStorage.setItem("token", data.token);
+	    localStorage.setItem("id", data.userId);
+	    localStorage.setItem("admin", data.admin);
 
             setPseudo("");
             setEmail("");
@@ -43,14 +47,13 @@ function CreateUser(){
 	    navigate('/dashboard');
         } catch (error){
             console.error(error);
-            alert("Erreur lors de la création de l'utilisateur:\n" + error.error.message);
+            alert("Erreur lors de la connexion:\n" + error.error.message);
         }
     };
 
     return (
         <>
-	    <PasswordGenerator />
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleLogin}>
                 <div className="mb-3">
                     <label className="form-label">Pseudo</label> 
                     <input type="text" className="form-control" value={pseudo} onChange={(e) => setPseudo(e.target.value)} required />
@@ -63,14 +66,13 @@ function CreateUser(){
                     <label className="form-label">Mot de passe</label> 
                     <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required /> 
                 </div>
-                <div className="form-check mb-3"> 
-                    <input type="checkbox" className="form-check-input" checked={isAdmin} onChange={(e) => setIsAdmin(e.target.checked)} /> 
-                    <label className="form-check-label">Admin</label> 
-                </div>
-                <button className="btn btn-primary">Créer utilisateur</button>
+                <button className="btn btn-primary">Connexion</button>
             </form>
-        </>
+	    <button className="btn btn-primary" onClick={goToSignup}>Signup</button>
+        
+	    //<Routes><Route path="/signup" element={<CreateUser />} /></Routes>
+	</>
     );
 }
 
-export default CreateUser;
+export default Login;
