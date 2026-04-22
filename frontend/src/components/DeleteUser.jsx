@@ -7,18 +7,18 @@ function DeleteUser({ user_id, onDelete }) {
 
     const handleDelete = async (e) => {
         e.preventDefault();
-
+	const token = localStorage.getItem("token");
         try{
             const response = await fetch(
-		    `http://localhost:3000/profils/${userId}`,
-		    {method: "DELETE"},
-		    {headers: {
-			    Authorization: `Bearer ${localStorage.getItem("token")}`
-		    }}
+		    `http://localhost:3000/profils/${userId}`, {
+		    	method: "DELETE",
+		    	headers: {
+			    Authorization: `Bearer ${token}`
+		    	}
+		    }
 	    );
             const data = await response.json();
-            console.log(data);
-	
+		
 	    if (!response.ok) {throw data;}
             alert("Utilisateur supprimé !");
             setUserId("");

@@ -33,7 +33,10 @@ exports.login = (req, res, next) => {
                         userId: user._id,
 			admin: user.isAdmin,
                         token: jwt.sign(
-                            {userId: user._id},
+                            {
+			    userId: user._id,
+			    admin: user.isAdmin
+			    },
                             'PHRASE_ALEATOIRE_TRES_LONGUE',
                             { expiresIn: '24h' }
                         )

@@ -8,21 +8,46 @@ function UsersTable(){
     const [reload, setReload] = useState(false);
 
     useEffect(() => {
-	console.log("Fetching users");
-        fetchUsers();
+	fetchUsers();
     }, [reload]);
 
     const fetchUsers = async() => {
+
+	const token = localStorage.getItem("token");
+
         try{
-            const response = await fetch(`http://localhost:3000/profils`);
+            const response = await fetch(`http://localhost:3000/profils`, {
+		headers: {
+	    		Authorization: `Bearer ${token}`
+	    	}
+	    });
             const data = await response.json();
             setUsers(data);
-	    console.log(data);
+
 	    if (!response.ok) {throw data;}
         } catch(error){
 	    setUsers([]);
             console.error("Erreur récupération utilisateurs :", error);
         }
+    };
+    const fetchUser = async(id) => {
+
+	const token = localStorage.getItem("token");
+
+	try {
+	    const response = await fetch(`http://localhost:3000/profils/${id}`, {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	    });
+	    const data = await response.json();
+	    setUsers(data);
+
+	    if (!response.ok) {throw data;}
+	} catch(error) {
+	    setUsers([]);
+            console.error("Erreur récupération utilisateur :", error);
+	}
     };
 
     return (

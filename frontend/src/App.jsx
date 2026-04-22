@@ -8,14 +8,13 @@ import DeleteUser from "./components/DeleteUser";
 import GetUserById from "./components/GetUserById";
 import UpdateUser from "./components/UpdateUser";
 import PasswordGenerator from "./components/PasswordGenerator";
-
+import Logout from "./components/Logout";
 
 function App() {
 
 	const token = localStorage.getItem("token");
 	const admin = localStorage.getItem("admin") === "true";
 	const id = localStorage.getItem("id");
-	localStorage.clear();
 	const navigate = useNavigate();
 
 	return (
@@ -24,10 +23,16 @@ function App() {
 		<Route path="/" element={token ? <Navigate to='/dashboard' /> : <Navigate to='/connexion' />} />
 		<Route path="/connexion" element={<Login />} />
 		<Route path="/signup" element={<CreateUser />} />
-		<Route path="/users" element={admin ? <UsersTable /> : <Navigate to='/connexion' />} />
-		<Route path="/dashboard" element={admin ? <Navigate to='/users' /> : <h1>Systeme de messagerie</h1>} />
+		<Route path="/users" element={admin ? <UsersTable /> : <Navigate to='/dashboard' />} />
+		<Route path="/dashboard" element={
+			<>
+			{admin && <a href="/users">Manage users</a>}
+			<a href="/update">{admin ? "Edit profiles" : "Edit profile"}</a>
+			</>
+		} />
+		<Route path="/update" element={<UpdateUser />} />
 	</Routes>
-	<button onClick={() => navigate('/signup')}>Signup</button>
+	{token && <Logout />}
 	</>
 	)
 }

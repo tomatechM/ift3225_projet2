@@ -10,8 +10,6 @@ function Login(){
   
     const navigate = useNavigate();
 
-    localStorage.clear();
-
     const goToSignup = () => {
 	navigate('/signup');
     }
@@ -33,10 +31,8 @@ function Login(){
             });
 
             const data = await response.json();
-            console.log(data);
 
             if (!response.ok) {throw data;}
-
 	    localStorage.setItem("token", data.token);
 	    localStorage.setItem("id", data.userId);
 	    localStorage.setItem("admin", data.admin);
