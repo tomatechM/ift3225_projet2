@@ -1,63 +1,63 @@
-import { useEffect, useState} from 'react';
+import { useState } from 'react';
 
-import DeleteUser from "./DeleteUser";
-
-function UsersTable(){
+function UsersTable() {
     const [users, setUsers] = useState([]);
-    const [toDelete, setToDelete] = useState("");
-    const [reload, setReload] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    useEffect(() => {
-	console.log("Fetching users");
-        fetchUsers();
-    }, [reload]);
-
-    const fetchUsers = async() => {
-        try{
-            const response = await fetch(`http://localhost:3000/profils`);
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch('http://localhost:3000/profils', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
             const data = await response.json();
+            if (!response.ok) {
+                throw data;
+            }
             setUsers(data);
-	    console.log(data);
-	    if (!response.ok) {throw data;}
-        } catch(error){
-	    setUsers([]);
-            console.error("Erreur récupération utilisateurs :", error);
+            setLoaded(true);
+            setErrorMessage('');
+        } catch (error) {
+            setUsers([]);
+            setLoaded(true);
+            setErrorMessage(error.message || error.error || 'Erreur récupération utilisateurs.');
+            console.error('Erreur récupération utilisateurs :', error);
         }
     };
 
     return (
-        <>
-            <h3>Liste des utilisateurs</h3>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Pseudo</th>
-                        <th>Email</th>
-	    		<th>Admin</th>
-	    		<th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.length === 0 ? (
-                        <tr><td>Aucun utilisateur</td></tr>
-                    ) : (
-                        users.map((users) => (
-                            <tr key={users._id}>
-                                <td>{users._id}</td>
-                                <td>{users.pseudo}</td>
-                                <td>{users.email}</td>
-				<td>{users.isAdmin ? "Oui" : "Non"}</td>
-				<td>
-				    <button onClick={() => setToDelete(users._id)} className="btn btn-danger">Selectionner</button>
-				</td>
+        <div className="card p-3 mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h3>Liste des utilisateurs</h3>
+                <button className="btn btn-primary" onClick={fetchUsers}>Afficher tous les utilisateurs</button>
+            </div>
+            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+            {loaded && users.length === 0 && !errorMessage && <div className="alert alert-warning">Aucun utilisateur trouvé.</div>}
+            {users.length > 0 && (
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Pseudo</th>
+                            <th>Email</th>
+                            <th>Admin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map((user) => (
+                            <tr key={user._id}>
+                                <td>{user._id}</td>
+                                <td>{user.pseudo}</td>
+                                <td>{user.email}</td>
+                                <td>{user.isAdmin ? 'Oui' : 'Non'}</td>
                             </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
-	    <DeleteUser user_id={toDelete} onDelete={() => setReload(prev => !prev)} />
-        </>
+                        ))}
+                    </tbody>
+                </table>
+            )}
+        </div>
     );
 }
 

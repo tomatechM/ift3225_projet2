@@ -1,77 +1,63 @@
-import { useState, useEffect } from "react";
-import { useNavigate, BrowserRouter, Routes, Route } from "react-router-dom";
-import CreateUser from "./CreateUser";
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 
-function Login(){
-
-    const [pseudo, setPseudo] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-  
+function Login() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    localStorage.clear();
-
-    const goToSignup = () => {
-	navigate('/signup');
-    }
-
-    const handleLogin = async(e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
-        const user = {
-            pseudo, email, password
-        }
+        const credentials = { email, password };
 
-        try{
-            const response = await fetch(`http://localhost:3000/connexion`, {
-                method: "POST",
+        try {
+            const response = await fetch('http://localhost:3000/connexion', {
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json"
+                    'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(credentials)
             });
 
             const data = await response.json();
-            console.log(data);
+            if (!response.ok) {
+                throw data;
+            }
 
-            if (!response.ok) {throw data;}
-
-	    localStorage.setItem("token", data.token);
-	    localStorage.setItem("id", data.userId);
-	    localStorage.setItem("admin", data.admin);
-
-            setPseudo("");
-            setEmail("");
-            setPassword("");
-	    navigate('/dashboard');
-        } catch (error){
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('id', data.userId);
+            localStorage.setItem('admin', data.admin);
+            setErrorMessage('');
+            setEmail('');
+            setPassword('');
+            navigate('/dashboard');
+        } catch (error) {
             console.error(error);
-            alert("Erreur lors de la connexion:\n" + error.error.message);
+            setErrorMessage(error.message || error.error || 'Erreur lors de la connexion.');
         }
     };
 
     return (
-        <>
+        <div className="container mt-4">
+            <h1>Connexion</h1>
+            {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
             <form onSubmit={handleLogin}>
                 <div className="mb-3">
-                    <label className="form-label">Pseudo</label> 
-                    <input type="text" className="form-control" value={pseudo} onChange={(e) => setPseudo(e.target.value)} required />
+                    <label className="form-label">Courriel</label>
+                    <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required />
                 </div>
-                <div className="mb-3"> 
-                    <label className="form-label">Courriel</label> 
-                    <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} required /> 
-                </div>
-                <div className="mb-3"> 
-                    <label className="form-label">Mot de passe</label> 
-                    <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required /> 
+                <div className="mb-3">
+                    <label className="form-label">Mot de passe</label>
+                    <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 </div>
                 <button className="btn btn-primary">Connexion</button>
             </form>
-	    <button className="btn btn-primary" onClick={goToSignup}>Signup</button>
-        
-	    //<Routes><Route path="/signup" element={<CreateUser />} /></Routes>
-	</>
+            <div className="mt-3">
+                <p>Pas encore de compte ? <Link to="/signup">Inscrivez-vous ici</Link>.</p>
+            </div>
+        </div>
     );
 }
 
