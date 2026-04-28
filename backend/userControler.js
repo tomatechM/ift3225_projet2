@@ -1,6 +1,7 @@
 const User = require("./User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const dns = require("dns").promises;
 const { validateEmailAddress } = require("./emailValidator");
 
 exports.signup = async (req, res, next) => {
@@ -10,6 +11,18 @@ exports.signup = async (req, res, next) => {
         if (!pseudo || !email || !password) {
             return res.status(400).json({ error: "Pseudo, courriel et mot de passe sont requis." });
         }
+
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	const domain = email.split("@")[1];
+	//const emailRegex = `\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b`;
+
+	if (!emailRegex.test(email)) {return res.status(400).json({ error: "Adresse courriel invalide." });}
+	try {
+		const mxRec = await dns.resolveMx(domain);
+		if (mxRec.length <= 0) {throw mxRec;}
+	} catch (err) {
+		return res.status(400).json({ error: "Adresse courriel invalide." });
+	}
 
         // const emailIsValid = await validateEmailAddress(email);
         // if (!emailIsValid) {
